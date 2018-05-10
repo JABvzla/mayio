@@ -43,5 +43,6 @@ module.exports.routes = {
   * for configuration options and examples.                                  *
   *                                                                          *
   ***************************************************************************/
-  'GET /test': 'BusinessController.test',
+  // 'GET /test': 'BusinessController.test',
+  'GET /me': 'UserController.getUser',
 };
