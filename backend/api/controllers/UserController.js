@@ -6,10 +6,5 @@
  */
 
 module.exports = {
-  getUser: function (req,res) {
-    sails.log.info(req);
-
-  }
-
 };
 

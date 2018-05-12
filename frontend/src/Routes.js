@@ -1,6 +1,7 @@
 //Containers
 import Login from "./containers/Login";
 import Business from "./containers/Business";
+import Daily from "./containers/Daily";
 
 const Routes = [
   {
@@ -14,6 +15,12 @@ const Routes = [
     icon: "home_outline",
     route: "/business",
     component: Business
+  },
+  {
+    text: "Daily",
+    icon: "home_outline",
+    route: "/daily",
+    component: Daily
   },
 ];
 

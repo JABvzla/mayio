@@ -44,5 +44,5 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
   // 'GET /test': 'BusinessController.test',
-  'GET /me': 'UserController.getUser',
+  'GET /daily': 'DailyController.getByBusiness',
 };

@@ -8,29 +8,36 @@
 module.exports = {
 
 	attributes: {
-        id: {
-            type: 'integer',
-            autoIncrement: true,
-            primaryKey: true
-        },
-        date: {
-            type: 'date'
-        },
-        account: {
-			model: 'accountDefault'
-        },
-		reference: {
-			type: 'string'
-		},
-		description: {
-			type: 'string'
-		},
-		balance: {
-			type: 'float'
-		},
-		status: {
-			type: 'boolean',
-			defaultsTo: true
+      id: {
+          type: 'integer',
+          autoIncrement: true,
+          primaryKey: true
+      },
+      business: {
+        model: 'business',
+        required: true
+      },
+      date: {
+          type: 'date',
+          required: true
+      },
+      account: {
+			    model: 'accountDefault',
+          required: true
+      },
+      reference: {
+          type: 'string'
+      },
+      description: {
+          type: 'string'
+      },
+      balance: {
+          type: 'float',
+          required: true
+      },
+      status: {
+        type: 'boolean',
+        defaultsTo: true
 		}
 	}
 };

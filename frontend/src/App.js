@@ -10,11 +10,11 @@ class App extends Component {
     super(props);
 
     this.history = createHistory();
-    this.isSignIn();
+    // this.isSignIn();
   }
 
   isSignIn(){
-    axios.get(connection.auth('me'))
+    axios.get(connection.auth("me"))
       .then(r=> console.log(r))
       .catch(e=> console.log(e));
 
