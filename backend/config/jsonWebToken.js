@@ -3,10 +3,11 @@ module.exports.jsonWebToken = {
   options:{expiresIn: '2h'}, //see below this section for more on `options`
   default_account_status: true,
   afterSignup: function (user) {
-    console.log("User account created")
+    sails.log.info("User account created:" + user.email)
+
   },
   afterSignin: function (user) {
-    console.log("successful login")
+    sails.log.info("successful login:" + user.email)
   },
   authType: "email" //could be {email or username}
 };

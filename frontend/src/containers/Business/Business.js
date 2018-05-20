@@ -1,6 +1,10 @@
 import React, {Component} from "react";
-import axios from "axios";
-import connection from "../../connection";
+import Connection from "../../Connection";
+import { withStyles } from "material-ui/styles";
+import TexField from "material-ui/TextField";
+import Button from "material-ui/Button";
+import Paper from "material-ui/Paper";
+import List, { ListItem, ListItemText } from 'material-ui/List';
 
 class Business extends Component {
   constructor(props){
@@ -10,18 +14,16 @@ class Business extends Component {
       business: [],
       name: ""
     };
-    this.addBusiness = this.addBusiness.bind(this);
-    this.onNameChange = this.onNameChange.bind(this);
-  }
 
-  componentDidMount() {
+    this.addBusiness = this.addBusiness.bind(this);
+    this.onSelectBusiness = this.onSelectBusiness.bind(this);
+    this.onNameChange = this.onNameChange.bind(this);
     this.getBusiness();
   }
 
   getBusiness() {
-    axios.get(connection.auth("user/"+localStorage.getItem("user")))
-      .then(r=> this.setState({business:r.data.businesses}))
-      .catch(e=> console.log(e));
+    Connection.call("user/"+localStorage.getItem("user"))
+      .then(r=> this.setState({business:r.data.businesses}));
   }
 
   addBusiness() {
@@ -30,29 +32,55 @@ class Business extends Component {
       name: this.state.name
     };
 
-    axios.post(connection.auth("business"),data)
-      .then(r=> this.getBusiness())
-      .catch(e=> console.log(e));
+    Connection.call("business", data, "POST")
+      .then(r=> this.getBusiness());
+  }
+
+  onSelectBusiness(business) {
+    this.props.history.push({
+      pathname: "/daily",
+      state: { business: business }
+    });
   }
 
   onNameChange = e => this.setState({name: e.target.value});
 
   render() {
+    const { classes } = this.props;
+
     return (
-      <div>
+      <Paper className={classes.paper} >
         <div>
-          <input type="text" onChange={this.onNameChange}/>
-          <input type="button" value="agregar" onClick={this.addBusiness}/>
+          <TexField type="text" label="Nombre" style={{width:260, marginRight: 20}} onChange={this.onNameChange} />
+          <Button onClick={this.addBusiness} variant="fab" color="primary">+</Button>
         </div>
-        <ul>
-          {this.state.business.map((e,k)=>
-            <li key={k}>{e.name}</li>
+
+        <List component="nav">
+          {this.state.business.map((business,k)=>
+            <ListItem button key={k} onClick={() => this.onSelectBusiness(business)}>
+              <ListItemText primary={business.name} />
+            </ListItem>
           )}
-        </ul>
-      </div>
+        </List>
+      </Paper>
     );
   }
 }
 
 
-export default Business;
+const styles =  ({
+  paper: {
+    maxWidth: 350,
+    height: 300,
+    maxHeight: 300,
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-around",
+    padding: 20,
+    margin: 'auto',
+    marginTop: '50%',
+    transform: "translateY(-50%)"
+  }
+});
+
+export default withStyles(styles)(Business);

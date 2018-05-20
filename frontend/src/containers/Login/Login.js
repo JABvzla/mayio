@@ -1,8 +1,11 @@
 import React, {Component} from "react";
-import axios from "axios";
+import Connection from "../../Connection";
+
+import { withStyles } from "material-ui/styles";
+import Paper from "material-ui/Paper";
 import TextField from "material-ui/TextField";
 import Button from "material-ui/Button";
-import connection from "../../connection";
+import Typography from "material-ui/Typography";
 
 class Login extends Component {
 
@@ -23,13 +26,16 @@ class Login extends Component {
   onLogin() {
     if(!this.state.isLoggin  && this.state.email && this.state.password){
       let data = {
-        email: this.state.email,
+        email: this.state.email.toLowerCase(),
         password: this.state.password
       };
 
-      axios.post(connection.url + 'jwt/auth', data)
-        .then( r=> {localStorage.setItem("_token", r.data.token); localStorage.setItem("user", r.data.user.id);console.log(r.data);})
-        .catch( e=> console.log(e));
+      Connection.call("jwt/auth", data, "POST")
+        .then( r => {
+          localStorage.setItem("_token", r.data.token);
+          localStorage.setItem("user", r.data.user.id);
+          this.props.history.push("/");
+        });
     }
   }
 
@@ -37,16 +43,32 @@ class Login extends Component {
   onPasswordChange = e => this.setState({password: e.target.value});
 
   render() {
+    const { classes } = this.props;
+
     return (
-      <div>
-        <TextField label={"Usuario"} onChange={this.onEmailChange} />
-        <TextField label={"Contraseña"} onChange={this.onPasswordChange} />
-        <Button onClick={this.onLogin}>Iniciar Sessión</Button>
-      </div>
+      <Paper className={classes.paper}>
+        <Typography variant="headline" align="center">Iniciar Sesión</Typography>
+        <TextField label={"Usuario"} onChange={this.onEmailChange} type="email" autoFocus />
+        <TextField label={"Contraseña"} onChange={this.onPasswordChange} type="password"/>
+        <Button onClick={this.onLogin} variant="raised" color="primary" >Entrar</Button>
+      </Paper>
     );
   }
-
-
 }
 
-export default Login;
+const styles =  ({
+  paper: {
+    maxWidth: 350,
+    height: 300,
+    maxHeight: 300,
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-around",
+    padding: 20,
+    margin: 'auto',
+    marginTop: '50%',
+    transform: "translateY(-50%)"
+  }
+});
+
+export default withStyles(styles)(Login);

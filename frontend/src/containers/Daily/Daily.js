@@ -1,41 +1,46 @@
 import React, {Component} from "react";
 import InputDaily from "./InputDaily";
 import Table, { TableBody, TableCell, TableHead, TableRow } from "material-ui/Table";
-import connection from "../../connection";
-import axios from "axios";
+import Connection from "../../Connection";
 
 class Daily extends Component {
   constructor(props){
     super(props);
-
-    this.state = {
-      dailys: [],
-      accounts: [],
-    };
-    this.getDailys = this.getDailys.bind(this);
-    this.getAccounts = this.getAccounts.bind(this);
-    this.getAccounts();
-    this.getDailys();
+    if(this.props.history.location.state && this.props.history.location.state.business) {
+      this.state = {
+        business: this.props.history.location.state.business,
+        dailys: [],
+        accounts: [],
+      };
+      this.getDailys = this.getDailys.bind(this);
+      this.getAccounts = this.getAccounts.bind(this);
+      this.getAccounts();
+      this.getDailys();
+    }else{
+      this.props.history.push("/");
+    }
   }
 
   getAccounts() {
-    axios.get(connection.auth("accountdefault"))
+    Connection.call("accountdefault")
       .then(r=> this.setState({accounts: r.data }));
   }
 
   getDailys() {
     let data = {
-      business: 1,
+      business: this.state.business.id,
       date: "2018-05"
     };
-
-    axios.get(connection.auth("daily"),{params:data})
-      .then(r => this.setState({dailys: r.data}))
-      .catch(e => console.log(e));
-
+    Connection.call("daily", data, "GET")
+      .then(r => this.setState({dailys: r.data}));
   }
 
   render() {
+    if(!this.state) return null;
+    //
+    // console.log(this.state.dailys);
+    // console.log(this.state.business);
+
 
     return (
       <div>
@@ -50,21 +55,21 @@ class Daily extends Component {
             </TableRow>
           </TableHead>
           <TableBody>
-            {this.state.dailys.map((e,k) =>
+            {this.state.dailys.map((daily,k) =>
               <TableRow key={k}>
                 <TableCell component="th" scope="row">
-                  {this.state.accounts.filter(a=>a.id === e.account)[0].name}
+                  {this.state.accounts.filter(a=>a.id === daily.account)[0].name}
                 </TableCell>
-                <TableCell>{e.reference}</TableCell>
-                <TableCell>{e.description}</TableCell>
-                <TableCell>{e.balance}</TableCell>
-                <TableCell>{e.balance}</TableCell>
+                <TableCell>{daily.reference}</TableCell>
+                <TableCell>{daily.description}</TableCell>
+                <TableCell>{daily.balance}</TableCell>
+                <TableCell>{daily.balance}</TableCell>
               </TableRow>
             )}
           </TableBody>
         </Table>
 
-        <InputDaily business={1} date={"2018-05-09"} onRefresh={this.getDailys}/>
+        <InputDaily business={this.state.business.id} date={"2018-05-09"} onRefresh={this.getDailys}/>
       </div>
     );
   }

@@ -2,22 +2,27 @@ import React, { Component } from "react";
 import { Router, Route } from "react-router-dom";
 import Routes from "./Routes";
 import createHistory from "history/createBrowserHistory";
-import connection from "./connection";
-import axios from "axios";
+import Connection from "./Connection";
 
 class App extends Component {
   constructor(props) {
     super(props);
 
     this.history = createHistory();
-    // this.isSignIn();
+    this.isSignIn();
   }
 
   isSignIn(){
-    axios.get(connection.auth("me"))
-      .then(r=> console.log(r))
-      .catch(e=> console.log(e));
 
+    if(localStorage.getItem("_token") && localStorage.getItem("user")){
+      Connection.call("me")
+        .then(r=> { if(this.history.location.pathname === "/login") this.history.push("/") });
+    }else{
+      localStorage.clear();
+      if(this.history.location.pathname !== "/login"){
+        this.history.push("/login");
+      }
+    }
   }
 
   render() {
@@ -25,7 +30,7 @@ class App extends Component {
       <Router history={this.history}>
         <div>
           {Routes.map((element, key) =>
-            <Route exact path={element.route} component={element.component} key={key} />
+            <Route exact path={element.route} component={element.component} key={key} history={this.history}/>
           )}
         </div>
       </Router>

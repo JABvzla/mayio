@@ -13,7 +13,7 @@ const Routes = [
   {
     text: "Business",
     icon: "home_outline",
-    route: "/business",
+    route: "/",
     component: Business
   },
   {
