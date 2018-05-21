@@ -1,7 +1,9 @@
 import React, {Component} from "react";
-import InputDaily from "./InputDaily";
-import Table, { TableBody, TableCell, TableHead, TableRow } from "material-ui/Table";
 import Connection from "../../Connection";
+import InputDaily from "./InputDaily";
+import { withStyles } from "material-ui/styles";
+import Table, { TableBody, TableCell, TableHead, TableRow } from "material-ui/Table";
+import DatePicker from "./DatePicker"
 
 class Daily extends Component {
   constructor(props){
@@ -9,13 +11,14 @@ class Daily extends Component {
     if(this.props.history.location.state && this.props.history.location.state.business) {
       this.state = {
         business: this.props.history.location.state.business,
+        date: '',
         dailys: [],
         accounts: [],
       };
       this.getDailys = this.getDailys.bind(this);
       this.getAccounts = this.getAccounts.bind(this);
+      this.selectDate = this.selectDate.bind(this);
       this.getAccounts();
-      this.getDailys();
     }else{
       this.props.history.push("/");
     }
@@ -26,21 +29,27 @@ class Daily extends Component {
       .then(r=> this.setState({accounts: r.data }));
   }
 
-  getDailys() {
+  getDailys(date) {
     let data = {
       business: this.state.business.id,
-      date: "2018-05"
+      date: date,
     };
     Connection.call("daily", data, "GET")
       .then(r => this.setState({dailys: r.data}));
   }
 
-  render() {
-    if(!this.state) return null;
-    //
-    // console.log(this.state.dailys);
-    // console.log(this.state.business);
+  selectDate(date) {
+    this.setState({ date: date });
+    this.getDailys(date);
+  }
 
+  render() {
+
+    if(!this.state) return null;
+
+    if(!this.state.date){
+      return <DatePicker onSelected={this.selectDate} />;
+    }
 
     return (
       <div>
@@ -50,30 +59,30 @@ class Daily extends Component {
               <TableCell>Cuenta</TableCell>
               <TableCell>Referencia</TableCell>
               <TableCell>Descripcion</TableCell>
-              <TableCell>Debe</TableCell>
-              <TableCell>Haber</TableCell>
+              <TableCell>Monto</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {this.state.dailys.map((daily,k) =>
               <TableRow key={k}>
                 <TableCell component="th" scope="row">
-                  {this.state.accounts.filter(a=>a.id === daily.account)[0].name}
+                    {this.state.accounts.filter(a=>a.id === daily.account)[0].name}
                 </TableCell>
                 <TableCell>{daily.reference}</TableCell>
                 <TableCell>{daily.description}</TableCell>
                 <TableCell>{daily.balance}</TableCell>
-                <TableCell>{daily.balance}</TableCell>
               </TableRow>
             )}
           </TableBody>
+
         </Table>
 
-        <InputDaily business={this.state.business.id} date={"2018-05-09"} onRefresh={this.getDailys}/>
+        <InputDaily business={this.state.business.id} date={this.state.date} accounts={this.state.accounts} onRefresh={this.getDailys}/>
       </div>
     );
   }
 }
 
+const styles = {};
 
-export default Daily;
+export default withStyles(styles)(Daily);

@@ -12,7 +12,7 @@ module.exports = {
     let date = req.param('date');
     let business = req.param('business');
 
-    date = date.split('-');
+    date = date.split('/');
     let year = date[0];
     let month = date[1];
     let monthEnd = (month+1)>12? 1 : month+1;
