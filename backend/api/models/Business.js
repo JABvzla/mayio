@@ -23,10 +23,6 @@ module.exports = {
         users: {
         	collection: 'user',
         	via: 'businesses'
-        },
-        accounts: {
-            collection: 'accountCustom',
-            via: 'business'
         }
     }
 };

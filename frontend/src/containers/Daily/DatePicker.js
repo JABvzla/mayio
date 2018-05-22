@@ -11,7 +11,7 @@ class DatePicker extends Component {
     super(props);
 
     this.state = {
-      monthSelected: {},
+      monthSelected: {name: "Mayo",       id: "05"},
       menuMonth: false,
       menuTarget: null,
       yearSelected: (new Date()).getFullYear(),
@@ -83,9 +83,7 @@ class DatePicker extends Component {
 
 const styles = {
   datePaper: {
-    margin: "auto",
-    marginTop: "50%",
-    transform: "translateY(-50%)",
+    margin: "100px auto",
     width: 340,
     height: 80,
     padding: 20,

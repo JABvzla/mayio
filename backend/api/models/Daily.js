@@ -22,7 +22,7 @@ module.exports = {
           required: true
       },
       account: {
-			    model: 'accountDefault',
+			    model: 'account',
           required: true
       },
       reference: {

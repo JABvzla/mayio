@@ -33,8 +33,7 @@ class Connection {
 
       axios(option).then(r=> resolve(r))
         .catch(e=>{
-          console.log(e);
-          if(window.location.pathname !== "/login"){
+          if(e.response.status === 401 && window.location.pathname !== "/login"){
             localStorage.clear();
             window.location.href = "/login";
           }

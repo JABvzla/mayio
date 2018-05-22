@@ -3,7 +3,8 @@ import Connection from "../../Connection";
 import InputDaily from "./InputDaily";
 import { withStyles } from "material-ui/styles";
 import Table, { TableBody, TableCell, TableHead, TableRow } from "material-ui/Table";
-import DatePicker from "./DatePicker"
+import Paper from "material-ui/Paper";
+import DatePicker from "./DatePicker";
 
 class Daily extends Component {
   constructor(props){
@@ -25,7 +26,7 @@ class Daily extends Component {
   }
 
   getAccounts() {
-    Connection.call("accountdefault")
+    Connection.call("account")
       .then(r=> this.setState({accounts: r.data }));
   }
 
@@ -44,7 +45,7 @@ class Daily extends Component {
   }
 
   render() {
-
+    const { classes } = this.props;
     if(!this.state) return null;
 
     if(!this.state.date){
@@ -52,7 +53,7 @@ class Daily extends Component {
     }
 
     return (
-      <div>
+      <Paper className={classes.paper}>
         <Table>
           <TableHead>
             <TableRow>
@@ -64,7 +65,7 @@ class Daily extends Component {
           </TableHead>
           <TableBody>
             {this.state.dailys.map((daily,k) =>
-              <TableRow key={k}>
+              <TableRow key={k} className={classes.row}>
                 <TableCell component="th" scope="row">
                     {this.state.accounts.filter(a=>a.id === daily.account)[0].name}
                 </TableCell>
@@ -78,11 +79,21 @@ class Daily extends Component {
         </Table>
 
         <InputDaily business={this.state.business.id} date={this.state.date} accounts={this.state.accounts} onRefresh={this.getDailys}/>
-      </div>
+      </Paper>
     );
   }
 }
 
-const styles = {};
+const styles = {
+  paper:{
+    maxWidth: 1000,
+    margin: "100px auto"
+  },
+  row: {
+    '&:nth-of-type(even)': {
+      backgroundColor: '#F8F8F8',
+    },
+  }
+};
 
 export default withStyles(styles)(Daily);

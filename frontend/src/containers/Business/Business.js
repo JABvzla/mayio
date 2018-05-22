@@ -55,7 +55,7 @@ class Business extends Component {
           <Button onClick={this.addBusiness} variant="fab" color="primary">+</Button>
         </div>
 
-        <List component="nav">
+        <List component="nav" className={classes.list}>
           {this.state.business.map((business,k)=>
             <ListItem button key={k} onClick={() => this.onSelectBusiness(business)}>
               <ListItemText primary={business.name} />
@@ -71,8 +71,7 @@ class Business extends Component {
 const styles =  ({
   paper: {
     maxWidth: 350,
-    height: 300,
-    maxHeight: 300,
+    minHeight: 300,
     display: "flex",
     flexDirection: "column",
     justifyContent: "space-around",
@@ -80,6 +79,11 @@ const styles =  ({
     margin: 'auto',
     marginTop: '50%',
     transform: "translateY(-50%)"
+  },
+  list:{
+    maxHeight: 290,
+    overflowY: "scroll",
+    overflowX: "hidden",
   }
 });
 

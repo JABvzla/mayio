@@ -21,7 +21,9 @@ class InputDaily extends Component {
       amount: 0,
     };
 
-    this.onAccountPress = this.onAccountPress.bind(this)
+    this.accountTarget = null;
+
+    this.onAccountPress = this.onAccountPress.bind(this);
     this.onAddDaily = this.onAddDaily.bind(this);
     this.onAccountChange = this.onAccountChange.bind(this);
     this.onReferenceChange = this.onReferenceChange.bind(this);
@@ -54,6 +56,7 @@ class InputDaily extends Component {
             description: '',
             amount: this.state.amount*-1
           });
+          this.accountTarget.focus();
         });
     }
   }
@@ -83,6 +86,7 @@ class InputDaily extends Component {
 
   onAccountChange(e){
     const val = e.target.value;
+    this.accountTarget = e.target;
     let suggest = this.props.accounts;
 
     val.split(' ').forEach( el =>
@@ -140,6 +144,7 @@ class InputDaily extends Component {
 const styles =  ({
   inputDaily: {
     display: "flex",
+    justifyContent: "space-around",
     width: "100%",
     position: "relative",
     marginBottom: 100,
@@ -150,8 +155,8 @@ const styles =  ({
   suggest: {
     position: "absolute",
     backgroundColor: "#fff",
-    width: 200,
-    top: '100%'
+    width: '100%',
+    top: "101%"
   }
 });
 
