@@ -38,25 +38,29 @@ module.exports = {
 
     await Daily.query(`
         SELECT
-          account.name,
-          accountsection.name as section,
-          CASE WHEN b.account=account.id THEN b.balanceBefore else 0 END as balanceBefore,
-          SUM(case when daily.balance < 0 then daily.balance else 0 end) as debits,
-          SUM(case when daily.balance > 0 then daily.balance else 0 end) as credits,
-          SUM(daily.balance) as totalMonth,
-          SUM(daily.balance) +  CASE WHEN b.account=account.id THEN b.balanceBefore else 0 END  as total
-        FROM daily, account, accountsection,
-          (
-            SELECT daily.account ,SUM(daily.balance) as balanceBefore
-            FROM daily, account
-            WHERE  account.id = daily.account AND daily.date < "${endDate}" AND daily.business=${business}
-            GROUP BY daily.account
-          ) as b
-        WHERE account.id = daily.account
-              AND accountsection.id = account.section
-              AND daily.date > "${startDate}" AND daily.date <= "${endDate}"
-              AND daily.business=1
-        GROUP BY daily.account, b.account;
+          a.*,
+          CASE WHEN b.balanceBefore THEN b.balanceBefore ELSE 0 END AS balanceBefore,
+          CASE WHEN b.balanceBefore THEN b.balanceBefore + a.totalMonth ELSE a.totalMonth END AS total
+        FROM (
+          SELECT
+            account.id,
+            account.name,
+            accountsection.name AS section,
+            SUM(CASE WHEN daily.balance < 0 THEN daily.balance ELSE 0 END) AS debits,
+            SUM(CASE WHEN daily.balance > 0 THEN daily.balance ELSE 0 END) AS credits,
+            SUM(daily.balance) AS totalMonth
+          FROM daily, account, accountsection
+          WHERE account.id = daily.account
+            AND accountsection.id = account.section
+            AND daily.date > "${startDate}" AND daily.date <= "${endDate}"
+            AND daily.business=${business}
+          GROUP BY daily.account) a
+        LEFT JOIN (
+          SELECT daily.account AS id, SUM(daily.balance) AS balanceBefore
+          FROM daily, account
+            WHERE account.id = daily.account AND daily.date < "${endDate}" AND daily.business=${business}
+          GROUP BY daily.account) b
+        ON a.id = b.id
       `, (err, rawResult) => {
 
         let result = {};
