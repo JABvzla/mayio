@@ -24,7 +24,55 @@ module.exports = {
   },
 
   majorAnalytic: async function(req, res) {
-    res.send('major');
+
+    let business = req.param('business');
+    let account = req.param('account');
+    let startDate = new Date(req.param('startdate'));
+    let endDate = new Date(req.param('enddate'));
+
+    startDate = startDate.toLocaleDateString();
+    endDate = endDate.toLocaleDateString();
+
+    await Daily.query(`
+        SELECT
+          d.date,
+          d.reference,
+          d.description,
+          CASE WHEN d.balance < 0 THEN d.balance ELSE 0 END AS debits,
+          CASE WHEN d.balance > 0 THEN d.balance ELSE 0 END AS credits,
+          SUM( (
+                  SELECT CASE WHEN SUM(daily.balance) THEN SUM(daily.balance) ELSE 0 END FROM daily
+                  WHERE daily.account = ${account}
+                    AND daily.business = ${business}
+                    AND daily.date <= "${startDate}"
+               ) +
+               cumulative.balance) AS total
+        FROM daily d
+
+        INNER JOIN daily cumulative
+          ON d.id >= cumulative.id
+          AND cumulative.account = ${account}
+          AND cumulative.business = ${business}
+          AND cumulative.date > "${startDate}" AND cumulative.date <= "${endDate}"
+
+        WHERE d.account = ${account}
+          AND d.business = ${business}
+          AND d.date > "${startDate}" AND d.date <= "${endDate}"
+        GROUP BY d.id,
+                 d.balance
+        ORDER BY d.createdAt ASC;
+      `, (err, rawResult) => {
+        Daily.findOne({
+          where: {
+            business: business,
+            account: account,
+            date: {"<" : endDate}
+          },
+        }).sum('balance').groupBy('account').then(r=>{
+          rawResult.push(r);
+          res.ok(rawResult);
+        });
+    });
   },
 
   checkupBalance: async function(req, res) {
@@ -73,6 +121,5 @@ module.exports = {
 
         res.ok(result);
       });
-
   }
 };
