@@ -2,6 +2,7 @@
 import Login from "./containers/Login";
 import Business from "./containers/Business";
 import Daily from "./containers/Daily";
+import Major from "./containers/Major";
 
 const Routes = [
   {
@@ -21,6 +22,12 @@ const Routes = [
     icon: "home_outline",
     route: "/daily",
     component: Daily
+  },
+  {
+    text: "Major Analytics",
+    icon: "home_outline",
+    route: "/major",
+    component: Major
   },
 ];
 

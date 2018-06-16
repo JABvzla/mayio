@@ -11,7 +11,7 @@ class DatePicker extends Component {
     super(props);
 
     this.state = {
-      monthSelected: {name: "Mayo",       id: "05"},
+      monthSelected: {name: "Enero",       id: "01"},
       menuMonth: false,
       menuTarget: null,
       yearSelected: (new Date()).getFullYear(),

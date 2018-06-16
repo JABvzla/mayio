@@ -77,8 +77,7 @@ const styles =  ({
     justifyContent: "space-around",
     padding: 20,
     margin: 'auto',
-    marginTop: '50%',
-    transform: "translateY(-50%)"
+    marginTop: 100,
   },
   list:{
     maxHeight: 290,
