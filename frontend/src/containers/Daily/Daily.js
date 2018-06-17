@@ -4,7 +4,7 @@ import InputDaily from "./InputDaily";
 import { withStyles } from "material-ui/styles";
 import Table, { TableBody, TableCell, TableHead, TableRow } from "material-ui/Table";
 import Paper from "material-ui/Paper";
-import DatePicker from "./DatePicker";
+import Button from "material-ui/Button";
 
 class Daily extends Component {
   constructor(props){
@@ -12,14 +12,13 @@ class Daily extends Component {
     if(this.props.history.location.state && this.props.history.location.state.business) {
       this.state = {
         business: this.props.history.location.state.business,
-        date: '',
+        date: this.props.history.location.state.date,
         dailys: [],
         accounts: [],
       };
-      this.getDailys = this.getDailys.bind(this);
-      this.getAccounts = this.getAccounts.bind(this);
-      this.selectDate = this.selectDate.bind(this);
       this.getAccounts();
+      this.getDailys = this.getDailys.bind(this);
+      this.toMenu = this.toMenu.bind(this);
     }else{
       this.props.history.push("/");
     }
@@ -27,33 +26,35 @@ class Daily extends Component {
 
   getAccounts() {
     Connection.call("account")
-      .then(r=> this.setState({accounts: r.data }));
+      .then(r=>{
+        this.setState({accounts: r.data });
+        this.getDailys();
+      });
   }
 
-  getDailys(date) {
+  getDailys() {
     let data = {
-      business: this.state.business.id,
-      date: date,
+      business: this.state.business,
+      date: this.state.date,
     };
     Connection.call("daily", data, "GET")
       .then(r => this.setState({dailys: r.data}));
   }
 
-  selectDate(date) {
-    this.setState({ date: date });
-    this.getDailys(date);
-  }
+  toMenu(){
+    this.props.history.push({
+      pathname: "/",
+      state: { business: this.state.business}
+    });
 
+  }
   render() {
     const { classes } = this.props;
     if(!this.state) return null;
 
-    if(!this.state.date){
-      return <DatePicker onSelected={this.selectDate} />;
-    }
-
     return (
       <Paper className={classes.paper}>
+        <Button variant={"raised"} onClick={this.toMenu}>Menu</Button>
         <Table>
           <TableHead>
             <TableRow>
@@ -67,7 +68,7 @@ class Daily extends Component {
             {this.state.dailys.map((daily,k) =>
               <TableRow key={k} className={classes.row}>
                 <TableCell component="th" scope="row">
-                    {this.state.accounts.filter(a=>a.id === daily.account)[0].name}
+                  {this.state.accounts.filter(a=>a.id === daily.account)[0].name}
                 </TableCell>
                 <TableCell>{daily.reference}</TableCell>
                 <TableCell>{daily.description}</TableCell>
@@ -78,7 +79,7 @@ class Daily extends Component {
 
         </Table>
 
-        <InputDaily business={this.state.business.id} date={this.state.date} accounts={this.state.accounts} onRefresh={this.getDailys}/>
+        <InputDaily business={this.state.business} date={this.state.date} accounts={this.state.accounts} onRefresh={this.getDailys}/>
       </Paper>
     );
   }
@@ -90,8 +91,8 @@ const styles = {
     margin: "100px auto"
   },
   row: {
-    '&:nth-of-type(even)': {
-      backgroundColor: '#F8F8F8',
+    "&:nth-of-type(even)": {
+      backgroundColor: "#F8F8F8",
     },
   }
 };

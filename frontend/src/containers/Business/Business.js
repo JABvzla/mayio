@@ -37,10 +37,7 @@ class Business extends Component {
   }
 
   onSelectBusiness(business) {
-    this.props.history.push({
-      pathname: "/daily",
-      state: { business: business }
-    });
+    this.props.onSelect(business);
   }
 
   onNameChange = e => this.setState({name: e.target.value});

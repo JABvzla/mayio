@@ -44,6 +44,7 @@ class InputDaily extends Component {
 
       Connection.call("daily", data, "POST")
         .then(r=>{
+          console.log(r);
           this.props.onRefresh(this.props.date);
           // this.setState(this.initialState);
           this.setState({
@@ -54,7 +55,7 @@ class InputDaily extends Component {
             suggestShow: false,
             reference: '',
             description: '',
-            amount: this.state.amount*-1
+            amount: (this.state.amount<=0)? 0 : this.state.amount*-1
           });
           this.accountTarget.focus();
         });

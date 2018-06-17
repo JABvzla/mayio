@@ -16,7 +16,7 @@ class App extends Component {
 
     if(localStorage.getItem("_token") && localStorage.getItem("user")){
       Connection.call("me")
-        .then(r=> { if(this.history.location.pathname === "/login") this.history.push("/") });
+        .then(r=> { if(this.history.location.pathname === "/login") this.history.push("/"); });
     }else{
       localStorage.clear();
       if(this.history.location.pathname !== "/login"){

@@ -14,24 +14,9 @@
     font-size: .9em;
 }
 
-table.major{
+table.checkup{
     margin: 50px auto;
     width:100%;
     max-width: 800px;
     font-size: 12px;
-}
-
-table.major thead td:nth-child(3){
-    text-align: center;
-}
-table.major td{
-    min-width: 50px;
-}
-/*Description*/
-table.major td:nth-child(3){
-    min-width: 200px;
-}
-
-.textRight{
-    text-align: right;
 }

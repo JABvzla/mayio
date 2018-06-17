@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component} from "react";
 import Connection from "../../Connection";
 import ReactToPrint from "react-to-print";
 import "./major.css";
@@ -11,11 +11,13 @@ class Major extends Component {
     this.state = {
       major : null
     };
-
-    this.business = 1;
+    const locationState = this.props.history.location.state;
+    console.log(this.props.history.location );
+    this.business = locationState.business;
     this.account = 1;
-    this.startdate = "2018/04/01";
-    this.enddate = "2018/07/01";
+    this.startdate = locationState.startDate;
+    this.enddate = locationState.endDate;
+    this.accountName = "Banco de Venezuela";
 
     this.getMajor();
 
@@ -37,7 +39,8 @@ class Major extends Component {
     const data = this.state.major;
     let rows = [];
     let key = 0;
-    rows.push(<tr key={key++}><td> </td><td> </td><td style={{textAlign: "right"}}>Saldo Anterior : </td><td> </td><td> </td><td>{data["beforeBalance"]}</td></tr>);
+    console.log(this.state.major);
+    rows.push(<tr key={key++}><td> </td><td> </td><td className={"textRight"}>Saldo Anterior : </td><td> </td><td> </td><td>{data["beforeBalance"]}</td></tr>);
     for(let daily in data){
 
       if(Array.isArray(data[daily])){
@@ -65,7 +68,7 @@ class Major extends Component {
           <tr key={key++}>
             <td> </td>
             <td> </td>
-            <td style={{textAlign:"right"}}>Total {daily} : </td>
+            <td className={"textRight"}>Total {daily} : </td>
             <td >{totalDebits}</td>
             <td >{totalCredits}</td>
             <td >{totalDebits + totalCredits}</td>
@@ -78,7 +81,7 @@ class Major extends Component {
 
   render() {
     if(!this.state.major){
-      return <div>Cargando...</div>
+      return <div>Cargando...</div>;
     }
 
     return (
@@ -91,22 +94,22 @@ class Major extends Component {
           <div className={"title"}>
             <h3>Major Analitico</h3>
             <span>Desde el {this.startdate} hasta el {this.enddate}</span>
-            <span>Cuenta: Banco de Venezuela</span>
+            <span>Cuenta: {this.accountName}</span>
           </div>
-          <table>
-          <thead>
-            <tr>
-              <td>Fecha</td>
-              <td>Referencia</td>
-              <td>Descripcion</td>
-              <td>Debe</td>
-              <td>Haber</td>
-              <td>Total</td>
-            </tr>
-          </thead>
-          <tbody>
-            {this.getRows()}
-          </tbody>
+          <table className={"major"}>
+            <thead>
+              <tr>
+                <td>Fecha</td>
+                <td>Referencia</td>
+                <td>Descripcion</td>
+                <td>Debe</td>
+                <td>Haber</td>
+                <td>Total</td>
+              </tr>
+            </thead>
+            <tbody>
+              {this.getRows()}
+            </tbody>
           </table>
         </div>
       </div>

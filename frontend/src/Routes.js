@@ -1,8 +1,9 @@
 //Containers
 import Login from "./containers/Login";
-import Business from "./containers/Business";
+import Menu from "./containers/Menu";
 import Daily from "./containers/Daily";
 import Major from "./containers/Major";
+import Checkup from "./containers/Checkup";
 
 const Routes = [
   {
@@ -12,10 +13,10 @@ const Routes = [
     component: Login
   },
   {
-    text: "Business",
+    text: "Menu",
     icon: "home_outline",
     route: "/",
-    component: Business
+    component: Menu
   },
   {
     text: "Daily",
@@ -28,6 +29,12 @@ const Routes = [
     icon: "home_outline",
     route: "/major",
     component: Major
+  },
+  {
+    text: "Checkup",
+    icon: "home_outline",
+    route: "/checkup",
+    component: Checkup
   },
 ];
 
