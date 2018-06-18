@@ -1,6 +1,9 @@
 import React, {Component} from "react";
 import DatePicker from "../../components/DatePicker";
 import Business from "../Business";
+import { withStyles } from "material-ui/styles";
+import Paper from "material-ui/Paper";
+import AccountPicker from "../../components/AccountPicker";
 
 class Menu extends Component {
 
@@ -11,8 +14,10 @@ class Menu extends Component {
 
     this.state = {
       business: businessId,
+      account: 0,
     };
 
+    this.onAccountSelect = this.onAccountSelect.bind(this);
     this.onSelectBusiness = this.onSelectBusiness.bind(this);
     this.toDaily = this.toDaily.bind(this);
     this.toMajor = this.toMajor.bind(this);
@@ -36,6 +41,7 @@ class Menu extends Component {
       pathname: "/major",
       state: {
         business: this.state.business,
+        account: this.state.account,
         startDate: start,
         endDate: end
       }
@@ -52,17 +58,57 @@ class Menu extends Component {
     });
   }
 
+  onAccountSelect(account){
+    this.setState({ account: account.id})
+  }
+
   render() {
     if(!this.state.business) return <Business onSelect={this.onSelectBusiness}/>;
 
+    const { classes } = this.props;
+
     return (
       <div>
-        <DatePicker title={"Asiento de Diario"} actionName={"Entrar"} onSelected={this.toDaily}/>
-        <DatePicker title={"Mayor Analitico"} actionName={"Ver"} withDateEnd={true} onSelected={this.toMajor} />
-        <DatePicker title={"Balance de Comprobación"} actionName={"Ver"} onSelected={this.toCheckUp}/>
+        <Paper className={classes.datePaper}>
+          <h3 className={classes.title}>Asiento de Diario</h3>
+          <DatePicker actionName={"Entrar"} onSelected={this.toDaily}/>
+        </Paper>
+        <Paper className={classes.datePaper}>
+          <h3>Mayor Analitico</h3>
+          <AccountPicker onSelected={this.onAccountSelect} />
+          <DatePicker actionName={"Ver"} withDateEnd={true} onSelected={this.toMajor} />
+        </Paper>
+        <Paper className={classes.datePaper}>
+          <DatePicker title={"Balance de Comprobación"} actionName={"Ver"} onSelected={this.toCheckUp}/>
+        </Paper>
       </div>
     );
   }
 }
 
-export default Menu;
+const styles = {
+  datePaper: {
+    margin: "50px auto",
+    width: 340,
+    padding: 20,
+    overflow: "hidden",
+  },
+  selectGrid: {
+    marginBottom: 10,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-around",
+    position: "relative",
+  },
+  title: {
+    marginTop: 0,
+    marginBottom: 20,
+    textAlign: "center"
+  },
+  monthButton: {
+    minWidth: 122,
+    maxWidth: 122
+  }
+};
+
+export default withStyles(styles)(Menu);

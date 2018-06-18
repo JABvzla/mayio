@@ -15,7 +15,7 @@ class Checkup extends Component {
     const locationState = this.props.history.location.state;
     this.business = locationState.business;
     this.enddate = locationState.endDate;
-
+    this.key = 0;
     this.getCheckup();
 
   }
@@ -33,25 +33,27 @@ class Checkup extends Component {
   getRows(){
     const data = this.state.checkup;
     let rows = [];
-    let key = 0;
-
     for(let account in data){
       if(Array.isArray(data[account])){
-        data[account].map(e => {
-          rows.push(
-            <tr key={key++}>
-              <td>{e.name}</td>
-              <td>{e.balanceBefore}</td>
-              <td>{e.credits}</td>
-              <td>{e.debits}</td>
-              <td>{e.totalMonth}</td>
-              <td>{e.total}</td>
-            </tr>
-          );
-          return null;
-        });
+       rows = this.getDaily(data[account], rows);
       }
     }
+    return rows;
+  }
+
+  getDaily(arr, rows){
+    arr.map(e =>
+      rows.push(
+        <tr key={this.key++}>
+          <td>{e.name}</td>
+          <td>{e.balanceBefore}</td>
+          <td>{e.credits}</td>
+          <td>{e.debits}</td>
+          <td>{e.totalMonth}</td>
+          <td>{e.total}</td>
+        </tr>
+      )
+    );
     return rows;
   }
 

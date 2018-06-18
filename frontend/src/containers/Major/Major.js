@@ -12,15 +12,14 @@ class Major extends Component {
       major : null
     };
     const locationState = this.props.history.location.state;
-    console.log(this.props.history.location );
     this.business = locationState.business;
-    this.account = 1;
+    this.account = locationState.account;
     this.startdate = locationState.startDate;
     this.enddate = locationState.endDate;
     this.accountName = "Banco de Venezuela";
 
     this.getMajor();
-
+    this.key = 0;
   }
 
   getMajor(){
@@ -38,47 +37,51 @@ class Major extends Component {
   getRows(){
     const data = this.state.major;
     let rows = [];
-    let key = 0;
-    console.log(this.state.major);
-    rows.push(<tr key={key++}><td> </td><td> </td><td className={"textRight"}>Saldo Anterior : </td><td> </td><td> </td><td>{data["beforeBalance"]}</td></tr>);
+
+    rows.push(<tr key={this.key++}><td> </td><td> </td><td className={"textRight"}>Saldo Anterior : </td><td> </td><td> </td><td>{data["beforeBalance"]}</td></tr>);
     for(let daily in data){
 
       if(Array.isArray(data[daily])){
-        rows.push(<tr key={key++}><td> </td></tr>);
-        rows.push(<tr key={key++}><td>{daily}</td></tr>);
-
-        let totalCredits = 0, totalDebits = 0;
-        data[daily].map(e => {
-          rows.push(
-            <tr key={key++}>
-              <td> </td>
-              <td>{e.reference}</td>
-              <td>{e.description}</td>
-              <td>{e.credits}</td>
-              <td>{e.debits}</td>
-              <td>{e.total}</td>
-            </tr>
-          );
-          totalCredits += e.debits;
-          totalDebits += e.credits;
-          return null;
-        });
-
-        rows.push(
-          <tr key={key++}>
-            <td> </td>
-            <td> </td>
-            <td className={"textRight"}>Total {daily} : </td>
-            <td >{totalDebits}</td>
-            <td >{totalCredits}</td>
-            <td >{totalDebits + totalCredits}</td>
-          </tr>
-        );
+          rows = this.addRows(data[daily], rows, daily)
       }
     }
     return rows;
   }
 
+  addRows(arr, rows, daily){
+    rows.push(<tr key={this.key++}><td> </td></tr>);
+    rows.push(<tr key={this.key++}><td>{daily}</td></tr>);
+
+    let totalCredits = 0, totalDebits = 0;
+    arr.map(e => {
+      rows.push(
+        <tr key={this.key++}>
+          <td> </td>
+          <td>{e.reference}</td>
+          <td>{e.description}</td>
+          <td>{e.credits}</td>
+          <td>{e.debits}</td>
+          <td>{e.total}</td>
+        </tr>
+      );
+      totalCredits += e.debits;
+      totalDebits += e.credits;
+      return null;
+    });
+
+    rows.push(
+      <tr key={this.key++}>
+        <td> </td>
+        <td> </td>
+        <td className={"textRight"}>Total {daily} : </td>
+        <td >{totalDebits}</td>
+        <td >{totalCredits}</td>
+        <td >{totalDebits + totalCredits}</td>
+      </tr>
+    );
+
+    return rows;
+  }
   render() {
     if(!this.state.major){
       return <div>Cargando...</div>;

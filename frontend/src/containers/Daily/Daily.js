@@ -16,20 +16,13 @@ class Daily extends Component {
         dailys: [],
         accounts: [],
       };
-      this.getAccounts();
+
       this.getDailys = this.getDailys.bind(this);
       this.toMenu = this.toMenu.bind(this);
+      this.getDailys();
     }else{
       this.props.history.push("/");
     }
-  }
-
-  getAccounts() {
-    Connection.call("account")
-      .then(r=>{
-        this.setState({accounts: r.data });
-        this.getDailys();
-      });
   }
 
   getDailys() {
@@ -54,7 +47,7 @@ class Daily extends Component {
 
     return (
       <Paper className={classes.paper}>
-        <Button variant={"raised"} onClick={this.toMenu}>Menu</Button>
+        <Button variant={"raised"} onClick={this.toMenu} className={classes.backButton} >Volver</Button>
         <Table>
           <TableHead>
             <TableRow>
@@ -67,9 +60,7 @@ class Daily extends Component {
           <TableBody>
             {this.state.dailys.map((daily,k) =>
               <TableRow key={k} className={classes.row}>
-                <TableCell component="th" scope="row">
-                  {this.state.accounts.filter(a=>a.id === daily.account)[0].name}
-                </TableCell>
+                <TableCell component="th" scope="row">{daily.account.name}</TableCell>
                 <TableCell>{daily.reference}</TableCell>
                 <TableCell>{daily.description}</TableCell>
                 <TableCell>{daily.balance}</TableCell>
@@ -86,8 +77,14 @@ class Daily extends Component {
 }
 
 const styles = {
+  backButton:{
+    margin: 10,
+    marginLeft: "auto",
+  },
   paper:{
     maxWidth: 1000,
+    display: "flex",
+    flexDirection: "column",
     margin: "100px auto"
   },
   row: {

@@ -15,12 +15,13 @@ module.exports = {
 
     endDate.setMonth(endDate.getMonth()+1);
 
-    let result = await Daily.find({
+    await Daily.find({
       where: {business: business, date:{'>=': startDate.toLocaleDateString(), '<':endDate.toLocaleDateString()} },
       select: ["date","account", "reference", "description", "balance"]
-    });
-
-    res.send(result);
+    }).then(r => Account.find({ select: ["id","name"]}).then( accounts => {
+      r.map(e => e.account = accounts.find(a => a.id === e.account) );
+      res.send(r);
+    }));
   },
 
   majorAnalytic: async function(req, res) {

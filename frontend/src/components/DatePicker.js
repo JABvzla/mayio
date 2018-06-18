@@ -2,9 +2,7 @@ import React, {Component} from 'react';
 import {withStyles} from "material-ui/styles/index";
 import TextField from "material-ui/TextField";
 import Menu, { MenuItem } from "material-ui/Menu";
-import Paper from "material-ui/Paper";
 import Button from "material-ui/Button";
-
 
 class DatePicker extends Component {
   constructor(props){
@@ -65,14 +63,10 @@ class DatePicker extends Component {
   onYearEndChange = e => this.setState({ yearEndSelected: e.target.value });
 
   render() {
-    const { classes, title, actionName, withDateEnd } = this.props;
+    const { classes, actionName, withDateEnd } = this.props;
 
     return (
-      <Paper className={classes.datePaper}>
-        <h3 className={classes.title}>{title}</h3>
-        <div className={classes.selectGrid}>
-          <TextField label={"Cuenta"} />
-        </div>
+      <div>
         <div className={classes.selectGrid}>
           <TextField label={withDateEnd? "Fecha inicio" : "Fecha"} type="number" onChange={this.onYearChange} value={this.state.yearSelected}/>
           <Button variant={"raised"} onClick={this.showMonthMenu}
@@ -113,7 +107,7 @@ class DatePicker extends Component {
                 >
           {actionName}
         </Button>
-      </Paper>
+      </div>
     );
 
   }
