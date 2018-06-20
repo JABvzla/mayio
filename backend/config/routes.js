@@ -46,5 +46,6 @@ module.exports.routes = {
   'GET /me': 'UserController.me',
   'GET /daily': 'DailyController.getByBusiness',
   'GET /checkup': 'DailyController.checkupBalance',
-  'GET /major': 'DailyController.majorAnalytic'
+  'GET /major': 'DailyController.majorAnalytic',
+  'GET /accountsection': 'AccountSectionController.getWithAccounts'
 };
