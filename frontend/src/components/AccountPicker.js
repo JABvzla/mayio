@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component} from "react";
 import { withStyles } from "material-ui/styles";
 import Connection from "../Connection";
 import Paper from "material-ui/Paper";
@@ -10,7 +10,7 @@ import Dialog, {
   DialogActions,
   DialogContent,
   DialogContentText
-} from 'material-ui/Dialog';
+} from "material-ui/Dialog";
 
 class AccountPicker extends Component {
 
@@ -18,7 +18,7 @@ class AccountPicker extends Component {
     super(props);
 
     this.state = {
-      account: '',
+      account: "",
       accounts: [],
       accountIndex: -1,
       accountSelected: [],
@@ -37,9 +37,9 @@ class AccountPicker extends Component {
 
   getAccounts() {
     Connection.call("account")
-    .then(r=>{
-      this.setState({accounts: r.data });
-    });
+      .then(r=>{
+        this.setState({accounts: r.data });
+      });
   }
 
   addAccount(){
@@ -49,11 +49,11 @@ class AccountPicker extends Component {
     };
 
     Connection.call("account", data, "POST")
-    .then(r=>{
-      this.setState({accountSelected: [], account:'', suggestShow: false, accountIndex: -1});
-      this.getAccounts();
-      this.onDialogClose();
-    });
+      .then(r=>{
+        this.setState({accountSelected: [], account:"", suggestShow: false, accountIndex: -1});
+        this.getAccounts();
+        this.onDialogClose();
+      });
 
   }
 
@@ -82,7 +82,7 @@ class AccountPicker extends Component {
     }
     if(e.key === "Escape"){
       this.setState({
-        account: '',
+        account: "",
         suggestShow: false
       });
     }
@@ -92,9 +92,9 @@ class AccountPicker extends Component {
     const val = e.target.value;
     let suggest = this.state.accounts;
 
-    val.split(' ').forEach( el =>
+    val.split(" ").forEach( el =>
       suggest = suggest.filter( v =>
-        v.name.split(' ').some(str=> str.toLowerCase().match(el.toLowerCase()))
+        v.name.split(" ").some(str=> str.toLowerCase().match(el.toLowerCase()))
       ));
     this.setState({suggest: suggest, account: val, accountIndex: 0, suggestShow: true});
     if(this.props.onChange) this.props.onChange(e);
@@ -131,11 +131,11 @@ class AccountPicker extends Component {
           </DialogActions>
         </Dialog>
         <TextField label="Cuenta"
-                   className={classes.textField}
-                   value={this.state.account}
-                   autoFocus={true}
-                   onChange={this.onAccountChange}
-                   onKeyDown={this.onAccountPress}
+          className={classes.textField}
+          value={this.state.account}
+          autoFocus={true}
+          onChange={this.onAccountChange}
+          onKeyDown={this.onAccountPress}
         />
         <Paper className={classes.suggest} style={{display: this.state.suggestShow? "block" : "none", position: fullWidth? "absolute" : ""}}>
           {this.state.suggest.map((suggest,k)=>
@@ -153,7 +153,7 @@ const styles =  ({
   },
   suggest: {
     backgroundColor: "#fff",
-    width: '100%',
+    width: "100%",
     top: "101%"
   }
 });

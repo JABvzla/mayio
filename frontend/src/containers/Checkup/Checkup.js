@@ -35,7 +35,7 @@ class Checkup extends Component {
     let rows = [];
     for(let account in data){
       if(Array.isArray(data[account])){
-       rows = this.getDaily(data[account], rows);
+        rows = this.getDaily(data[account], rows);
       }
     }
     return rows;

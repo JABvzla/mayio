@@ -23,7 +23,7 @@ class Business extends Component {
 
   getBusiness() {
     Connection.call("user/"+localStorage.getItem("user"))
-      .then(r=> this.setState({business:r.data.businesses}));
+      .then(r=> this.setState({business:r.data.businesses, name: ""}));
   }
 
   addBusiness() {
@@ -48,7 +48,9 @@ class Business extends Component {
     return (
       <Paper className={classes.paper} >
         <div>
-          <TexField type="text" label="Nombre" style={{width:260, marginRight: 20}} onChange={this.onNameChange} />
+          <TexField type="text" label="Nombre Compañia" style={{width:260, marginRight: 20}}
+                    onChange={this.onNameChange}
+                    value={this.state.name}/>
           <Button onClick={this.addBusiness} variant="fab" color="primary">+</Button>
         </div>
 
@@ -78,7 +80,7 @@ const styles =  ({
   },
   list:{
     maxHeight: 290,
-    overflowY: "scroll",
+    overflowY: "auto",
     overflowX: "hidden",
   }
 });

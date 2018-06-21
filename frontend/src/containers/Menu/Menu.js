@@ -3,6 +3,7 @@ import DatePicker from "../../components/DatePicker";
 import Business from "../Business";
 import { withStyles } from "material-ui/styles";
 import Paper from "material-ui/Paper";
+import Button from "material-ui/Button";
 import AccountPicker from "../../components/AccountPicker";
 
 class Menu extends Component {
@@ -22,6 +23,7 @@ class Menu extends Component {
     this.toDaily = this.toDaily.bind(this);
     this.toMajor = this.toMajor.bind(this);
     this.toCheckUp = this.toCheckUp.bind(this);
+    this.toAccounts = this.toAccounts.bind(this);
   }
 
 
@@ -58,8 +60,12 @@ class Menu extends Component {
     });
   }
 
+  toAccounts(){
+    this.props.history.push("/accounts");
+  }
+
   onAccountSelect(account){
-    this.setState({ account: account.id})
+    this.setState({ account: account.id});
   }
 
   render() {
@@ -69,6 +75,8 @@ class Menu extends Component {
 
     return (
       <div>
+        <Button variant="raised" onClick={() => this.setState({business: 0})}>Compañias</Button>
+
         <Paper className={classes.datePaper}>
           <h3 className={classes.title}>Asiento de Diario</h3>
           <DatePicker actionName={"Entrar"} onSelected={this.toDaily}/>
@@ -81,6 +89,9 @@ class Menu extends Component {
         <Paper className={classes.datePaper}>
           <DatePicker title={"Balance de Comprobación"} actionName={"Ver"} onSelected={this.toCheckUp}/>
         </Paper>
+        <Paper className={classes.buttonPaper}>
+          <Button variant={"raised"} color={"primary"} onClick={this.toAccounts}>Cuentas</Button>
+        </Paper>
       </div>
     );
   }
@@ -92,6 +103,14 @@ const styles = {
     width: 340,
     padding: 20,
     overflow: "hidden",
+  },
+  buttonPaper: {
+    margin: "50px auto",
+    width: 340,
+    padding: 20,
+    overflow: "hidden",
+    display: "flex",
+    justifyContent: "center"
   },
   selectGrid: {
     marginBottom: 10,

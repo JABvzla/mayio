@@ -4,6 +4,7 @@ import Menu from "./containers/Menu";
 import Daily from "./containers/Daily";
 import Major from "./containers/Major";
 import Checkup from "./containers/Checkup";
+import Accounts from "./containers/Accounts";
 
 const Routes = [
   {
@@ -17,6 +18,12 @@ const Routes = [
     icon: "home_outline",
     route: "/",
     component: Menu
+  },
+  {
+    text: "Accounts",
+    icon: "home_outline",
+    route: "/accounts",
+    component: Accounts
   },
   {
     text: "Daily",

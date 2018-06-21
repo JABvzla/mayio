@@ -42,7 +42,7 @@ class Major extends Component {
     for(let daily in data){
 
       if(Array.isArray(data[daily])){
-          rows = this.addRows(data[daily], rows, daily)
+        rows = this.addRows(data[daily], rows, daily);
       }
     }
     return rows;
