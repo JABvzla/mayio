@@ -7,7 +7,8 @@
 
 module.exports = {
   me: function (req,res) {
-    res.send();
+    sails.log.info('Mayio api running with sails');
+    res.send('Mayio api running with sails');
   }
 };
 

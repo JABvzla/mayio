@@ -5,6 +5,7 @@ import { withStyles } from "material-ui/styles";
 import Paper from "material-ui/Paper";
 import TextField from "material-ui/TextField";
 import Button from "material-ui/Button";
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from "material-ui/Typography";
 
 class Login extends Component {
@@ -16,6 +17,7 @@ class Login extends Component {
       email: "",
       password: "",
       isLoggin: false,
+      loading: false
     };
 
     this.onLogin = this.onLogin.bind(this);
@@ -29,13 +31,15 @@ class Login extends Component {
         email: this.state.email.toLowerCase(),
         password: this.state.password
       };
-
+      this.setState({loading: true});
       Connection.call("jwt/auth", data, "POST")
         .then( r => {
           localStorage.setItem("_token", r.data.token);
           localStorage.setItem("user", r.data.user.id);
+          this.setState({loading: false});
           this.props.history.push("/");
-        });
+        })
+        .catch(() => this.setState({loading: false}));
     }
   }
 
@@ -44,6 +48,8 @@ class Login extends Component {
 
   render() {
     const { classes } = this.props;
+
+    if(this.state.loading) return <CircularProgress className={classes.loading}/>
 
     return (
       <Paper className={classes.paper}>
@@ -67,6 +73,10 @@ const styles =  ({
     padding: 20,
     margin: 'auto',
     marginTop: 100
+  },
+  loading: {
+    marginTop: 100,
+    marginLeft: "50%",
   }
 });
 

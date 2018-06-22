@@ -1,6 +1,7 @@
 import axios from "axios";
 
 const config = {
+  // url: "https://mayio.arepasoftware.com/",
   url: "http://localhost:1337/",
   tokenPath: "_token",
   auth: (path) => {
